@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import Profile,Post,Follow,Likes,Comments
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 import json
 # Create your views here.
+@login_required(login_url='/accounts/login')
 def mainPage(request):
     user = request.user
     try:
@@ -20,6 +22,7 @@ def mainPage(request):
         print("helll")
         return render(request,'main_page1.html',{'user':user})
 
+@login_required(login_url='/accounts/login')
 def profile_page(request):
     user = request.user
     ProfilePicture = Profile.objects.get(curr_user=user)
@@ -37,7 +40,7 @@ def profile_page(request):
     return render(request,'profile.html',context={'user':user,'profilePic':user_profile_pic,'userbio':user_bio,'user_posts':user_posts,'no_of_following':tot_no_following,'no_of_posts':user_posts.count(),'no_of_followers':tot_no_followers})
 
 
-
+@login_required(login_url='/accounts/login')
 def UpdateProfile(request,UID):
     user = request.user
     if request.method == 'POST':
@@ -74,7 +77,7 @@ def UpdateProfile(request,UID):
             tot_no_followers = '0'
         return render(request,'profile.html',context={'user':user,'profilePic':user_profile_pic,'userbio':user_bio,'user_posts':user_posts,'connection':is_following,'no_of_following':tot_no_following,'no_of_posts':user_posts.count(),'no_of_followers':tot_no_followers})
 
-
+@login_required(login_url='/accounts/login')
 def post_page(request):
     user = request.user
     if request.method == 'POST':
@@ -88,7 +91,7 @@ def post_page(request):
         return render(request,'upload_post.html')
 
 
-
+@login_required(login_url='/accounts/login')
 def explore(request):
     user = request.user
     users = User.objects.all()
@@ -99,7 +102,7 @@ def explore(request):
             all_profiles.append(Profile.objects.get(curr_user=i))
             all_users.append(i)
     return render(request,'explore.html',{'all_users':all_users,'all_profiles':all_profiles})
-
+@login_required(login_url='/accounts/login')
 def follow(request,UID):
     user = request.user
     another_user = User.objects.get(id=UID)
@@ -121,7 +124,7 @@ def follow(request,UID):
     response = json.dumps(resp)
     return HttpResponse(response,content_type = "application/json")
 
-
+@login_required(login_url='/accounts/login')
 def liked(request):
     user = request.user
     pid = request.GET.get('liked_id','')
@@ -144,7 +147,7 @@ def liked(request):
     response = json.dumps(resp)
     return HttpResponse(response,content_type = "application/json")
  
-
+@login_required(login_url='/accounts/login')
 def comments_section(request):
     user = request.user
     comments = request.GET.get('inputValue','')
@@ -155,7 +158,7 @@ def comments_section(request):
     comment_obj.save()
     return redirect(mainPage)
     
-
+@login_required(login_url='/accounts/login')
 def delPost(request,PID):
     post = Post.objects.get(id=PID)
     post.delete()
