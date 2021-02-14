@@ -1,6 +1,4 @@
 {% load static %}
-{% load socialaccount %}
-
 <!DOCTYPE html>
 <!-- Created By CodingNepal -->
 <html lang="en" dir="ltr">
@@ -34,9 +32,6 @@
       </div>
       <div class="signup-link">
         Dont have account? <a href="{% url 'signup' %}">Signup</a>
-      </div>
-      <div class="field">
-        <a href="{% provider_login_url 'google' %}" class="gbtn"><img src="{% static 'images/signin.png' %}"  alt="" width="220px" ></a>
       </div>
     </form>
   </div>
